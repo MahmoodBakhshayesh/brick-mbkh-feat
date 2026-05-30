@@ -1,0 +1,19 @@
+name: mbkh_feat
+description: Add a fully structured MBKH feature module to an existing MBKH project.
+version: 0.1.0+1
+vars:
+  feature_name:
+    type: string
+    description: Feature name (snake_case)
+    default: sample_feature
+    prompt: What is the feature name?
+  entity_name:
+    type: string
+    description: Primary entity name
+    default: SampleItem
+    prompt: What is the entity name?
+  usecase_action:
+    type: string
+    description: Initial usecase action (verb)
+    default: get
+    prompt: What is the initial usecase action?
