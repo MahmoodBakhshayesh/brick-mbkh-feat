@@ -1,20 +1,45 @@
 # Wiring Checklist (MBKH)
 
-Feature: `{{#snakeCase}}{{feature_name}}{{/snakeCase}}`
+Feature: `{{feature_name}}`
 
-Apply the following in existing project files:
+## 1. Routes
 
-1. `lib/core/navigation/app_route_names.dart`
-   - Add route constant:
-   - `static const {{#camelCase}}{{feature_name}}{{/camelCase}} = '{{#snakeCase}}{{feature_name}}{{/snakeCase}}';`
+`lib/core/navigation/app_route_names.dart`
 
-2. `lib/core/navigation/router_provider.dart`
-   - Add route entry:
-   - `GoRoute(path: '/${AppRouteNames.{{#camelCase}}{{feature_name}}{{/camelCase}}}', name: AppRouteNames.{{#camelCase}}{{feature_name}}{{/camelCase}}, builder: (context, state) => const {{#pascalCase}}{{feature_name}}{{/pascalCase}}View()),`
+```dart
+static const {{#camelCase}}{{feature_name}}{{/camelCase}} = '{{feature_name}}';
+```
 
-3. `lib/di.dart`
-   - Register:
-   - `{{#pascalCase}}{{feature_name}}{{/pascalCase}}DataSourceLocal`
-   - `{{#pascalCase}}{{feature_name}}{{/pascalCase}}DataSourceRemote`
-   - `{{#pascalCase}}{{feature_name}}{{/pascalCase}}Repository`
-   - `{{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Usecase`
+`lib/core/navigation/router_provider.dart`
+
+```dart
+GoRoute(
+  path: '/${AppRouteNames.{{#camelCase}}{{feature_name}}{{/camelCase}}}',
+  name: AppRouteNames.{{#camelCase}}{{feature_name}}{{/camelCase}},
+  builder: (context, state) => const {{#pascalCase}}{{feature_name}}{{/pascalCase}}View(),
+),
+```
+
+## 2. DI (`lib/di.dart`)
+
+Import data sources, repository, and use case. Then register the feature stack:
+
+```dart
+registerFeatureStack<{{#pascalCase}}{{feature_name}}{{/pascalCase}}DataSourceLocal, {{#pascalCase}}{{feature_name}}{{/pascalCase}}DataSourceRemote, {{#pascalCase}}{{feature_name}}{{/pascalCase}}Repository>(
+  locator: locator,
+  name: '{{#pascalCase}}{{feature_name}}{{/pascalCase}}DataSource',
+  createLocal: (l) => {{#pascalCase}}{{feature_name}}{{/pascalCase}}DataSourceLocal(l()),
+  createRemote: (l) => {{#pascalCase}}{{feature_name}}{{/pascalCase}}DataSourceRemote(l()),
+  createRepository: {{#pascalCase}}{{feature_name}}{{/pascalCase}}Repository.builder,
+);
+
+locator.registerLazySingleton(() => {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Usecase(locator()));
+```
+
+## 3. Localization (optional)
+
+If the phone view uses `context.localizations`, add ARB keys for this feature.
+
+## 4. API path
+
+Update `{{feature_name}}_data_source_remote.dart` with the real endpoint and HTTP verb.

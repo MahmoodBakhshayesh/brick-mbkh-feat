@@ -1,6 +1,8 @@
 name: mbkh_feat
-description: Add a fully structured MBKH feature module to an existing MBKH project.
-version: 0.1.0+1
+description: Add a MBKH feature module (RepositoryUseCase, registerFeatureStack wiring, async providers).
+repository: https://github.com/MahmoodBakhshayesh/brick-mbkh-feat
+
+version: 0.2.2+1
 vars:
   feature_name:
     type: string

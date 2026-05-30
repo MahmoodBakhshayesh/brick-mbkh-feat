@@ -1,28 +1,46 @@
-import '../../../core/interfaces/request_int.dart';
-import '../../../core/interfaces/response_int.dart';
-import '../../../core/interfaces/success_int.dart';
-import '../../../di.dart';
-import '../domain/interfaces/{{feature_name}}_repository_interface.dart';
+import '../../../core/interfaces/base_result.dart';
+import '../../../core/interfaces/base_usecase.dart';
 import '../domain/entities/{{entity_name}}_class.dart';
+import '../domain/repositories/{{feature_name}}_repository.dart';
 
-class {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Request extends RequestInt {
-  final String id;
-  {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Request({required this.id});
+class {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Request extends Request {
+  final String? id;
+
+  {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Request({this.id});
 
   @override
-  Map<String, dynamic> toJson() => {'Id': id};
-}
+  Failure? validate() => null;
 
-class {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Response extends ResponseInt {
-  final {{#pascalCase}}{{entity_name}}{{/pascalCase}}? data;
-  {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Response({required super.success, required super.message, this.data});
-}
-
-class {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Usecase extends SuccessUseCase<{{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Response, {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Request> {
   @override
-  Future<{{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Response> call(
+  Map<String, dynamic> toJson() => Request.apiEnvelope({'ID': id});
+}
+
+class {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Response extends UseCaseResponse {
+  final {{#pascalCase}}{{entity_name}}{{/pascalCase}}? {{#camelCase}}{{entity_name}}{{/camelCase}}Data;
+
+  {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Response({
+    super.success,
+    this.{{#camelCase}}{{entity_name}}{{/camelCase}}Data,
+    super.message,
+    super.error,
+  });
+}
+
+class {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Usecase
+    extends RepositoryUseCase<{{#pascalCase}}{{entity_name}}{{/pascalCase}}, {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Response, {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Request> {
+  final {{#pascalCase}}{{feature_name}}{{/pascalCase}}Repository _repository;
+
+  {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Usecase(this._repository);
+
+  @override
+  Future<{{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Response> fetchFromRepository(
     {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Request request,
-  ) async {
-    return locator.get<{{#pascalCase}}{{feature_name}}{{/pascalCase}}RepositoryInterface>().{{#camelCase}}{{usecase_action}}{{/camelCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}(request);
-  }
+  ) =>
+      _repository.{{#camelCase}}{{usecase_action}}{{/camelCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}(request);
+
+  @override
+  {{#pascalCase}}{{entity_name}}{{/pascalCase}}? dataFromResponse(
+    {{#pascalCase}}{{usecase_action}}{{/pascalCase}}{{#pascalCase}}{{entity_name}}{{/pascalCase}}Response response,
+  ) =>
+      response.{{#camelCase}}{{entity_name}}{{/camelCase}}Data;
 }
