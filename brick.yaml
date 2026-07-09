@@ -1,9 +1,14 @@
 name: mbkh_feat
-description: Add a MBKH feature module (RepositoryUseCase, registerFeatureStack wiring, async providers).
+description: Add an MBKH feature module (RepositoryUseCase, per-feature DI, registerFeatureStack).
 repository: https://github.com/MahmoodBakhshayesh/brick-mbkh-feat
 
-version: 0.2.2+1
+version: 0.5.0+1
 vars:
+  project_name:
+    type: string
+    description: Target Flutter package name (snake_case)
+    default: mbkh_app
+    prompt: What is the project package name?
   feature_name:
     type: string
     description: Feature name (snake_case)
@@ -11,9 +16,9 @@ vars:
     prompt: What is the feature name?
   entity_name:
     type: string
-    description: Primary entity name
-    default: SampleItem
-    prompt: What is the entity name?
+    description: Primary entity name (snake_case; class becomes PascalCase)
+    default: sample_item
+    prompt: What is the entity name? (snake_case, e.g. sample_item)
   usecase_action:
     type: string
     description: Initial usecase action (verb)

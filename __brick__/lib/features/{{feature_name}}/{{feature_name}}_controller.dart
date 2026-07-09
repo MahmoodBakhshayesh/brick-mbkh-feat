@@ -1,13 +1,14 @@
-import '../../core/controllers/base_controller.dart';
-import '../../core/helpers/use_case_runner.dart';
-import '../../di.dart';
+import 'package:{{project_name}}/core/helpers/use_case_runner.dart';
+import 'package:{{project_name}}/di.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../core/controllers/base_controller.dart';
 import 'domain/entities/{{entity_name}}_class.dart';
 import 'usecases/{{usecase_action}}_{{entity_name}}_usecase.dart';
 
 final {{#camelCase}}{{feature_name}}{{/camelCase}}ControllerProvider = Provider.autoDispose((ref) {
   final controller = {{#pascalCase}}{{feature_name}}{{/pascalCase}}Controller(ref);
+  Future.microtask(controller.init);
   ref.onDispose(() => controller.dispose());
   return controller;
 });

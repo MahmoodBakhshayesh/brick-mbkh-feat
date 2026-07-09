@@ -1,8 +1,8 @@
+import 'package:{{project_name}}/core/helpers/use_case_response_mapper.dart';
+import 'package:{{project_name}}/core/interfaces/base_repository.dart';
+import 'package:{{project_name}}/features/{{feature_name}}/usecases/{{usecase_action}}_{{entity_name}}_usecase.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../../core/helpers/use_case_response_mapper.dart';
-import '../../../../core/interfaces/base_repository.dart';
-import '../../usecases/{{usecase_action}}_{{entity_name}}_usecase.dart';
 import '../data_sources/{{feature_name}}_data_source_local.dart';
 import '../data_sources/{{feature_name}}_data_source_remote.dart';
 import '../interfaces/{{feature_name}}_repository_interface.dart';
